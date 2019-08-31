@@ -1,26 +1,23 @@
 
 import React, { Component, Fragment } from 'react';
-
 import { HashRouter as Router, Link, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import List from "./pages/List";
+import News from "./pages/News";
+import Profile from "./pages/Profile";
+import HKLayout from "./components/HKLayout";
 
-const Home = () => <div>首页</div>
-const About = () => <div>About</div>
-const User = () => <div>User</div>
 
 class App extends Component {
   render() {
     return (
       <Fragment>
         <Router>
-          <nav>
-            <Link to="/">首页</Link>
-            <Link to="/About">关于</Link>
-            <Link to="/User">用户</Link>
-          </nav>
           <section>
-            <Route path="/" exact  component={Home} />
-            <Route path="/About" component={About} />
-            <Route path="/User" component={User} />
+            <Route path="/" exact   render={()=> <HKLayout> <Home/> </HKLayout>   }  />
+            <Route path="/List" render={()=> <HKLayout> <List/> </HKLayout>   } />
+            <Route path="/News" render={()=> <HKLayout> <News/> </HKLayout>   } />
+            <Route path="/Profile" render={()=> <HKLayout> <Profile/> </HKLayout>   } />
           </section>
         </Router>
       </Fragment>
