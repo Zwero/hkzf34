@@ -14,7 +14,6 @@ class HKLayout extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0 }}>
         <TabBar
@@ -33,7 +32,7 @@ class HKLayout extends React.Component {
               this.props.history.push("/")
             }}
           >
-            {this.props.children}
+            {this.props.match.url === "/" && this.props.children}
           </TabBar.Item>
           <TabBar.Item
             title="找房"
@@ -45,7 +44,7 @@ class HKLayout extends React.Component {
               this.props.history.push("/List")
             }}
           >
-            {this.props.children}
+            {this.props.match.url === "/List" && this.props.children}
           </TabBar.Item>
           <TabBar.Item
             icon={<i className="iconfont icon-infom"></i>}
@@ -57,7 +56,7 @@ class HKLayout extends React.Component {
               this.props.history.push("/News")
             }}
           >
-            {this.props.children}
+             {this.props.match.url === "/News" && this.props.children}
           </TabBar.Item>
           <TabBar.Item
             icon={<i className="iconfont icon-my"></i>}
@@ -69,7 +68,7 @@ class HKLayout extends React.Component {
               this.props.history.push("/Profile")
             }}
           >
-            {this.props.children}
+            {this.props.match.url === "/Profile" && this.props.children}
           </TabBar.Item>
         </TabBar>
       </div>

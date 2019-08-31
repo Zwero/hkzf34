@@ -1,6 +1,6 @@
 
 import React, { Component, Fragment } from 'react';
-import { HashRouter as Router, Link, Route } from "react-router-dom";
+import { HashRouter as Router,  Route } from "react-router-dom";
 import Home from "./pages/Home";
 import List from "./pages/List";
 import News from "./pages/News";
