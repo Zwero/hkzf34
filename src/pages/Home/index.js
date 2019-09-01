@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { axios } from "../../utils/request";
-import { Carousel, WingBlank } from 'antd-mobile';
+import { Carousel } from 'antd-mobile';
 import { REACT_APP_API_URL } from "../../utils/urls";
+import SearchInput from "../../components/SearchInput";
 import nav1 from "../../assets/images/nav-1.png";
 import nav2 from "../../assets/images/nav-2.png";
 import nav3 from "../../assets/images/nav-3.png";
@@ -40,10 +41,10 @@ class index extends Component {
 
     // 3 资讯
     axios.get("/home/news")
-    .then(res => {
-      this.setState({ news: res.body });
-      console.log(res);
-    })
+      .then(res => {
+        this.setState({ news: res.body });
+        console.log(res);
+      })
   }
 
   render() {
@@ -52,6 +53,9 @@ class index extends Component {
       <div className={styles.hk_home}>
         {/* 轮播图 开始 */}
         <div className={styles.home_swiper}>
+          <div className={styles.home_search_input}>
+            <SearchInput />
+          </div>
           {swiperList.length && <Carousel
             autoplay
             infinite
@@ -114,20 +118,20 @@ class index extends Component {
         <div className={styles.home_news}>
           <div className={styles.home_news_title}>最新资讯</div>
           <div className={styles.home_news_content}>
-            {this.state.news.map(v=>
-            <div key={v.id} className={styles.news_item}>
-              <div className={styles.news_item_img}>
-                <img src={REACT_APP_API_URL + v.imgSrc} alt=""/>
-              </div>
-              <div className={styles.news_item_info}>
-                <div className={styles.news_item_name}>{v.title}</div>
-                <div className={styles.news_item_des}>
-                  <span className={styles.news_item_from} >{v.from}</span>
-                  <span className={styles.news_item_date} >{v.date}</span>
+            {this.state.news.map(v =>
+              <div key={v.id} className={styles.news_item}>
+                <div className={styles.news_item_img}>
+                  <img src={REACT_APP_API_URL + v.imgSrc} alt="" />
+                </div>
+                <div className={styles.news_item_info}>
+                  <div className={styles.news_item_name}>{v.title}</div>
+                  <div className={styles.news_item_des}>
+                    <span className={styles.news_item_from} >{v.from}</span>
+                    <span className={styles.news_item_date} >{v.date}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-              )}
+            )}
           </div>
         </div>
         {/* 最新资讯 结束*/}
