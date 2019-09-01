@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import axios from "axios";
+import {axios  } from "../../utils/request";
 import { Carousel, WingBlank } from 'antd-mobile';
+
+
+
+
 
 class index extends Component {
   state = {
@@ -8,10 +12,9 @@ class index extends Component {
     imgHeight: 176
   }
   componentDidMount() {
-    axios.get("http://hkzf.zbztb.cn/home/swiper")
+    axios.get("/home/swiper")
       .then(res => {
-
-        this.setState({ swiperList: res.data.body });
+        this.setState({ swiperList: res.body });
       })
   }
 
