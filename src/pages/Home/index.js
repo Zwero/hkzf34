@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { axios } from "../../utils/request";
 import { Carousel, WingBlank } from 'antd-mobile';
-
+import { REACT_APP_API_URL } from "../../utils/urls";
 import nav1 from "../../assets/images/nav-1.png";
 import nav2 from "../../assets/images/nav-2.png";
 import nav3 from "../../assets/images/nav-3.png";
 import nav4 from "../../assets/images/nav-4.png";
 
-// import "./index.module.css";
+
 
 import styles from "./index.module.scss";
 
@@ -21,7 +21,9 @@ class index extends Component {
     // 导航数据
     navs: [{ id: 0, title: '整租', img: nav1 }, { id: 1, title: '合租', img: nav2 }, { id: 2, title: '地图找房', img: nav3 }, { id: 3, title: '去出租', img: nav4 }],
     // 租房的小组
-    homeGroups: []
+    homeGroups: [],
+    // 资讯
+    news: []
   }
   componentDidMount() {
     // 1 轮播图
@@ -35,6 +37,13 @@ class index extends Component {
       .then(res => {
         this.setState({ homeGroups: res.body });
       })
+
+    // 3 资讯
+    axios.get("/home/news")
+    .then(res => {
+      this.setState({ news: res.body });
+      console.log(res);
+    })
   }
 
   render() {
@@ -94,13 +103,34 @@ class index extends Component {
                   <div className={styles.item_name_2}>{v.desc}</div>
                 </div>
                 <div className={styles.home_group_item_img}>
-                  <img src={"http://hkzf.zbztb.cn" + v.imgSrc} alt="" />
+                  <img src={REACT_APP_API_URL + v.imgSrc} alt="" />
                 </div>
               </div>
             )}
           </div>
         </div>
         {/* 租房小组 结束 */}
+        {/* 最新资讯 开始*/}
+        <div className={styles.home_news}>
+          <div className={styles.home_news_title}>最新资讯</div>
+          <div className={styles.home_news_content}>
+            {this.state.news.map(v=>
+            <div key={v.id} className={styles.news_item}>
+              <div className={styles.news_item_img}>
+                <img src={REACT_APP_API_URL + v.imgSrc} alt=""/>
+              </div>
+              <div className={styles.news_item_info}>
+                <div className={styles.news_item_name}>{v.title}</div>
+                <div className={styles.news_item_des}>
+                  <span className={styles.news_item_from} >{v.from}</span>
+                  <span className={styles.news_item_date} >{v.date}</span>
+                </div>
+              </div>
+            </div>
+              )}
+          </div>
+        </div>
+        {/* 最新资讯 结束*/}
       </div>
     );
   }

@@ -1,8 +1,9 @@
 import Axios from "axios";
+import { REACT_APP_API_URL } from "./urls";
 
-// 1 创建 axios 实例
+// 1 创建 axios 实例 
 export let axios = Axios.create({
-  baseURL: process.env.REACT_APP_DEV_URL
+  baseURL: REACT_APP_API_URL
 })
 
 // 2 axios 的响应拦截器 
