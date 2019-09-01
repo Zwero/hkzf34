@@ -19,12 +19,21 @@ class index extends Component {
     swiperList: [],
     imgHeight: 176,
     // 导航数据
-    navs: [{ id: 0, title: '整租', img: nav1 }, { id: 1, title: '合租', img: nav2 }, { id: 2, title: '地图找房', img: nav3 }, { id: 3, title: '去出租', img: nav4 }]
+    navs: [{ id: 0, title: '整租', img: nav1 }, { id: 1, title: '合租', img: nav2 }, { id: 2, title: '地图找房', img: nav3 }, { id: 3, title: '去出租', img: nav4 }],
+    // 租房的小组
+    homeGroups: []
   }
   componentDidMount() {
+    // 1 轮播图
     axios.get("/home/swiper")
       .then(res => {
         this.setState({ swiperList: res.body });
+      })
+
+    // 2 租房小组
+    axios.get("/home/groups")
+      .then(res => {
+        this.setState({ homeGroups: res.body });
       })
   }
 
@@ -70,6 +79,28 @@ class index extends Component {
           )}
         </nav>
         {/* 导航 结束 */}
+
+        {/* 租房小组 开始 */}
+        <div className={styles.home_group}>
+          <div className={styles.home_group_title}>
+            <span>租房小组</span>
+            <span>更多</span>
+          </div>
+          <div className={styles.home_group_content}>
+            {this.state.homeGroups.map(v =>
+              <div key={v.id} className={styles.home_group_item}>
+                <div className={styles.home_group_item_name}>
+                  <div className={styles.item_name_1}>{v.title}</div>
+                  <div className={styles.item_name_2}>{v.desc}</div>
+                </div>
+                <div className={styles.home_group_item_img}>
+                  <img src={"http://hkzf.zbztb.cn" + v.imgSrc} alt="" />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        {/* 租房小组 结束 */}
       </div>
     );
   }
