@@ -139,6 +139,12 @@ class index extends Component {
     return (Object.values(item)[0].length + 1) * 40;
 
   }
+  rowsRendered=({startIndex})=>{
+    if(startIndex===this.state.selectIndex){
+      return;
+    }
+    this.setState({ selectIndex:startIndex  });;
+  }
   render() {
     return (
       <div className="city_list">
@@ -157,6 +163,7 @@ class index extends Component {
                 rowHeight={this.rowHeight}  // 行高
                 rowRenderer={this.rowRenderer} // 每一行 如何渲染
                 width={width} // 宽度 
+                onRowsRendered={this.rowsRendered}
               />
             )}
           </AutoSizer>
