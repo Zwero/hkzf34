@@ -13,7 +13,7 @@ import store from "./store";
 
 class App extends Component {
   componentDidMount() {
-    // this.getLocalCity();
+    this.getLocalCity();
   }
 
   // 1 调用自己的方法

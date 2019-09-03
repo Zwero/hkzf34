@@ -1,7 +1,7 @@
 import { CITY_SET } from "../actionTypes";
 
 const defaultState = {
-  cityName: "xxx..."
+  cityName: ""
 }
 export default (state = defaultState, action) => {
   // 1 结构 value和type
