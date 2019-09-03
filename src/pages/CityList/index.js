@@ -37,7 +37,7 @@ class index extends Component {
     super();
     // 1 对store中的数据开启了监听 
     store.subscribe(this.getAllCitys);
-
+    // 2 非受控表单 创建 引用
     this.MainList=React.createRef();
   }
 
@@ -100,22 +100,26 @@ class index extends Component {
         totalCity[index][firstLetter].push(v.label);
       }
     })
+
+    // 构建 右侧 的字母 列表
     const keyArr=totalCity.map(v=>Object.keys(v)[0]);
     keyArr[0]="#";
     keyArr[1]="热";
     this.setState({ totalCity ,keyArr});
   }
 
+  // 左侧 每一行要渲染的 标签
   rowRenderer = ({
-    key,         // Unique key within array of rows
-    index,       // Index of row within collection
-    isScrolling, // The List is currently being scrolled
-    isVisible,   // This row is visible within the List (eg it is not an overscanned row)
-    style        // Style object to be applied to row (to position it)
+    key,         // 唯一属性
+    index,       // 大行的索引
+    isScrolling, // 是否在滚动中
+    isVisible,   // 是否可见
+    style        // 这一行上的样式
   }) => {
     // 1 获取被循环的元素
     const item = this.state.totalCity[index];
     // console.log(Object.keys(item)[0]); // ["当前城市 "]
+    // 2 获取列表要显示的 标题
     const keyName = Object.keys(item)[0];
     return (
       <div
@@ -123,33 +127,43 @@ class index extends Component {
         style={style}
       >
         <div className={styles.city_list_title}>
+          {/* 热门城市 。。 */}
           {keyName}
         </div>
         <div className={styles.city_list_content}>
           {item[keyName].map((v, i) =>
+          // 广州 北京  上海 深圳 。。。
             <div key={i} className={styles.list_item} >{v} </div>
           )}
         </div>
       </div>
     )
   }
+  // 每一大行的高度
   rowHeight = ({ index }) => {
+    // 获取 数组的元素 {"热门城市":["北京", "广州", "上海", "深圳"]}
     const item = this.state.totalCity[index];
     // 1 每一个 对象都只有 一个 属性值 = 数组
     // Object.values(item) //  [ [ "北京", "广州", "上海", "深圳" ]  ]
     // Object.values(item)[0].length // [ "北京", "广州", "上海", "深圳" ]
+    //  + 1 是因为标题也是 高度40
     return (Object.values(item)[0].length + 1) * 40;
-
   }
+
+  // 每一行被渲染的时候触发
   rowsRendered=({startIndex})=>{
+    // 被渲染的索引
     if(startIndex===this.state.selectIndex){
       return;
     }
+    // 设置 右侧被激活的索引
     this.setState({ selectIndex:startIndex  });;
   }
+  // 右侧字母的 点击事件
   keyLetterClick=(index)=>{
     // console.log(index);
     // console.log(this.MainList);
+    // 调用 List组件的方法 来控制 List标签的位移  根据被点击的索引
     this.MainList.current.scrollToRow(index);
   }
   render() {
@@ -165,14 +179,14 @@ class index extends Component {
           <AutoSizer>
             {({ height, width }) => (
               <List
-                ref={this.MainList}
+                ref={this.MainList}  // 非受控表单
                 height={height} // 自动设置的高度
                 rowCount={this.state.totalCity.length} // 数组的长度
                 rowHeight={this.rowHeight}  // 行高
                 rowRenderer={this.rowRenderer} // 每一行 如何渲染
                 width={width} // 宽度 
                 onRowsRendered={this.rowsRendered}
-                scrollToAlignment="start"
+                scrollToAlignment="start" // 对齐方式， 不加的话 点击右侧的字母，左侧 列表 滚动的位置不对
               />
              
             )}
@@ -183,7 +197,10 @@ class index extends Component {
         {/* 右侧 字母 开始 */}
         <div className={styles.key_list}>
           {this.state.keyArr.map((v,i)=>
-          <div onClick={this.keyLetterClick.bind(this,i)} key={v} className={styles.key_item +" "+  (i===this.state.selectIndex?styles.active:'')  }>{v}</div>
+          <div onClick={this.keyLetterClick.bind(this,i)}
+           key={v} 
+          //  类名 是 "key_item active" 中间是有空格的，所以 必须要 手动拼接一个 空 字符串
+           className={styles.key_item +" "+  (i===this.state.selectIndex?styles.active:'')  }>{v}</div>
            )}
         </div>
         {/* 右侧 字母 结束 */}
