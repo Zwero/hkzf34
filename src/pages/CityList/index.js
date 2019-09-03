@@ -113,16 +113,24 @@ class index extends Component {
         key={key}
         style={style}
       >
-        <div className="city_list_title">
+        <div className={styles.city_list_title}>
           {keyName}
         </div>
-        <div className="city_list_content">
+        <div className={styles.city_list_content}>
           {item[keyName].map((v, i) =>
-            <div key={i} className="list_item" >{v} </div>
+            <div key={i} className={styles.list_item} >{v} </div>
           )}
         </div>
       </div>
     )
+  }
+  rowHeight = ({ index }) => {
+    const item = this.state.totalCity[index];
+    // 1 每一个 对象都只有 一个 属性值 = 数组
+    // Object.values(item) //  [ [ "北京", "广州", "上海", "深圳" ]  ]
+    // Object.values(item)[0].length // [ "北京", "广州", "上海", "深圳" ]
+    return (Object.values(item)[0].length + 1) * 40;
+
   }
   render() {
     return (
@@ -139,7 +147,7 @@ class index extends Component {
               <List
                 height={height} // 自动设置的高度
                 rowCount={this.state.totalCity.length} // 数组的长度
-                rowHeight={20}  // 行高
+                rowHeight={this.rowHeight}  // 行高
                 rowRenderer={this.rowRenderer} // 每一行 如何渲染
                 width={width} // 宽度 
               />
