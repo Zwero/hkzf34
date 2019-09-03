@@ -13,21 +13,29 @@
   3 所有城市 /area/city
 2 思考如何构造数据  （什么样的格式）
  */
+
+
 import React, { Component } from 'react';
 import { NavBar, Icon } from 'antd-mobile';
 import { axios } from "../../utils/request";
 import store from "../../store";
-class index extends Component {
+import styles from "./index.module.scss";
+import { List, AutoSizer } from 'react-virtualized';
 
+
+
+class index extends Component {
+  state = {
+    // 网页要显示的数组
+    totalCity: []
+  }
   constructor() {
     super();
     // 1 对store中的数据开启了监听 
     store.subscribe(this.getAllCitys);
   }
 
-
   componentDidMount() {
-
     const { mapReducer } = store.getState();
     if (mapReducer.cityName) {
       this.getAllCitys();
@@ -35,7 +43,8 @@ class index extends Component {
   }
 
   // 获取 页面要的城市数据
-  async getAllCitys() {
+  getAllCitys = async () => {
+
     // 1 当前城市
     const cityName = store.getState().mapReducer.cityName;
     // 2 获取所有的城市
@@ -85,10 +94,36 @@ class index extends Component {
         totalCity[index][firstLetter].push(v.label);
       }
     })
-    console.log(totalCity);
+    this.setState({ totalCity });
   }
 
-
+  rowRenderer = ({
+    key,         // Unique key within array of rows
+    index,       // Index of row within collection
+    isScrolling, // The List is currently being scrolled
+    isVisible,   // This row is visible within the List (eg it is not an overscanned row)
+    style        // Style object to be applied to row (to position it)
+  }) => {
+    // 1 获取被循环的元素
+    const item = this.state.totalCity[index];
+    // console.log(Object.keys(item)[0]); // ["当前城市 "]
+    const keyName = Object.keys(item)[0];
+    return (
+      <div
+        key={key}
+        style={style}
+      >
+        <div className="city_list_title">
+          {keyName}
+        </div>
+        <div className="city_list_content">
+          {item[keyName].map((v, i) =>
+            <div key={i} className="list_item" >{v} </div>
+          )}
+        </div>
+      </div>
+    )
+  }
   render() {
     return (
       <div className="city_list">
@@ -97,8 +132,24 @@ class index extends Component {
           icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.go(-1)}
         >城市选择</NavBar>
+        {/*  列表 开始  */}
+        <div className={styles.list_content}>
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                height={height} // 自动设置的高度
+                rowCount={this.state.totalCity.length} // 数组的长度
+                rowHeight={20}  // 行高
+                rowRenderer={this.rowRenderer} // 每一行 如何渲染
+                width={width} // 宽度 
+              />
+            )}
+          </AutoSizer>
+        </div>
+        {/*  列表 结束  */}
       </div>
     );
   }
 }
+
 export default index;
