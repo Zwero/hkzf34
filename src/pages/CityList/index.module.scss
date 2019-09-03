@@ -21,3 +21,20 @@
     }
   }
 }
+.key_list{
+  position: fixed;
+  top: 10%;
+  right: 5px;
+  .key_item{
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .active{
+    background-color: green;
+    color: #fff;
+    border-radius: 50%;
+  }
+}

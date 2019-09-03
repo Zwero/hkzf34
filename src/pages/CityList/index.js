@@ -27,7 +27,11 @@ import { List, AutoSizer } from 'react-virtualized';
 class index extends Component {
   state = {
     // 网页要显示的数组
-    totalCity: []
+    totalCity: [],
+    // 右侧 字母映射的数组
+    keyArr:[],
+    // 右侧 被选中的 索引
+    selectIndex:0
   }
   constructor() {
     super();
@@ -94,7 +98,10 @@ class index extends Component {
         totalCity[index][firstLetter].push(v.label);
       }
     })
-    this.setState({ totalCity });
+    const keyArr=totalCity.map(v=>Object.keys(v)[0]);
+    keyArr[0]="#";
+    keyArr[1]="热";
+    this.setState({ totalCity ,keyArr});
   }
 
   rowRenderer = ({
@@ -155,6 +162,14 @@ class index extends Component {
           </AutoSizer>
         </div>
         {/*  列表 结束  */}
+
+        {/* 右侧 字母 开始 */}
+        <div className={styles.key_list}>
+          {this.state.keyArr.map((v,i)=>
+          <div key={v} className={styles.key_item +" "+  (i===this.state.selectIndex?styles.active:'')  }>{v}</div>
+           )}
+        </div>
+        {/* 右侧 字母 结束 */}
       </div>
     );
   }
