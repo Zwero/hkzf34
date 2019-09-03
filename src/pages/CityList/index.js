@@ -45,7 +45,7 @@ class index extends Component {
     const { mapReducer } = store.getState();
     if (mapReducer.cityName) {
       this.getAllCitys();
-    }
+    }  
   }
 
   // 获取 页面要的城市数据
