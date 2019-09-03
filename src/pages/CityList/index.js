@@ -37,6 +37,8 @@ class index extends Component {
     super();
     // 1 对store中的数据开启了监听 
     store.subscribe(this.getAllCitys);
+
+    this.MainList=React.createRef();
   }
 
   componentDidMount() {
@@ -145,6 +147,11 @@ class index extends Component {
     }
     this.setState({ selectIndex:startIndex  });;
   }
+  keyLetterClick=(index)=>{
+    // console.log(index);
+    // console.log(this.MainList);
+    this.MainList.current.scrollToRow(index);
+  }
   render() {
     return (
       <div className="city_list">
@@ -158,13 +165,16 @@ class index extends Component {
           <AutoSizer>
             {({ height, width }) => (
               <List
+                ref={this.MainList}
                 height={height} // 自动设置的高度
                 rowCount={this.state.totalCity.length} // 数组的长度
                 rowHeight={this.rowHeight}  // 行高
                 rowRenderer={this.rowRenderer} // 每一行 如何渲染
                 width={width} // 宽度 
                 onRowsRendered={this.rowsRendered}
+                scrollToAlignment="start"
               />
+             
             )}
           </AutoSizer>
         </div>
@@ -173,7 +183,7 @@ class index extends Component {
         {/* 右侧 字母 开始 */}
         <div className={styles.key_list}>
           {this.state.keyArr.map((v,i)=>
-          <div key={v} className={styles.key_item +" "+  (i===this.state.selectIndex?styles.active:'')  }>{v}</div>
+          <div onClick={this.keyLetterClick.bind(this,i)} key={v} className={styles.key_item +" "+  (i===this.state.selectIndex?styles.active:'')  }>{v}</div>
            )}
         </div>
         {/* 右侧 字母 结束 */}
