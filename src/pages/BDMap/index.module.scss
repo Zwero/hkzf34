@@ -1,8 +1,21 @@
-.hk_bdmap{
-  .bd_map_content{
-    height: calc(100vh  - 45px );
-    .allmap{
+.hk_bdmap {
+  .bd_map_content {
+    height: calc(100vh - 45px);
+    .allmap {
       height: 100%;
+
+      .circle {
+        height: 60px;
+        width: 60px;
+        background-color: yellowgreen;
+        color: #fff;
+        // currentColor == 字体的颜色 
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 }
