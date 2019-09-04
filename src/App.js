@@ -6,6 +6,7 @@ import List from "./pages/List";
 import News from "./pages/News";
 import CityList from "./pages/CityList";
 import Profile from "./pages/Profile";
+import BDMap from "./pages/BDMap";
 import HKLayout from "./components/HKLayout";
 import {citySet  } from "./store/actionCreator";
 import store from "./store";
@@ -40,6 +41,7 @@ class App extends Component {
             <Route path="/News" render={() => <HKLayout> <News /> </HKLayout>} />
             <Route path="/Profile" render={() => <HKLayout> <Profile /> </HKLayout>} />
             <Route path="/CityList" component={CityList} />
+            <Route path="/BDMap" component={BDMap} />
           </section>
         </Router>
       </Fragment>

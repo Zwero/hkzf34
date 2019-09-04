@@ -45,7 +45,7 @@ class index extends Component {
               <span>请输入小区或地址</span>
             </div>
           </div>
-          <div className={styles.si_icon}>
+          <div onClick={()=>this.props.history.push("/BDMap")} className={styles.si_icon}>
             <i className={"iconfont icon-map " + styles["icon-map"]}></i>
           </div>
         </div>
