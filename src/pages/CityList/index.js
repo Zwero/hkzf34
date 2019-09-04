@@ -19,6 +19,7 @@ import React, { Component } from 'react';
 import { NavBar, Icon } from 'antd-mobile';
 import { axios } from "../../utils/request";
 import store from "../../store";
+import { citySet } from "../../store/actionCreator";
 import styles from "./index.module.scss";
 import { List, AutoSizer } from 'react-virtualized';
 
@@ -29,23 +30,29 @@ class index extends Component {
     // 网页要显示的数组
     totalCity: [],
     // 右侧 字母映射的数组
-    keyArr:[],
+    keyArr: [],
     // 右侧 被选中的 索引
-    selectIndex:0
+    selectIndex: 0
   }
+  // 取消订阅的 函数
+  Unsubscribe = null;
   constructor() {
     super();
-    // 1 对store中的数据开启了监听 
-    store.subscribe(this.getAllCitys);
-    // 2 非受控表单 创建 引用
-    this.MainList=React.createRef();
+    // 1 对store中的数据开启了监听  返回一个变量 是个方法 == 取消订阅的方法 unsubscribe();
+    this.Unsubscribe = store.subscribe(this.getAllCitys);
+    //  2 非受控表单 创建 引用
+    this.MainList = React.createRef();
   }
 
   componentDidMount() {
     const { mapReducer } = store.getState();
     if (mapReducer.cityName) {
       this.getAllCitys();
-    }  
+    }
+  }
+
+  componentWillUnmount() {
+    // this.Unsubscribe();
   }
 
   // 获取 页面要的城市数据
@@ -102,10 +109,14 @@ class index extends Component {
     })
 
     // 构建 右侧 的字母 列表
-    const keyArr=totalCity.map(v=>Object.keys(v)[0]);
-    keyArr[0]="#";
-    keyArr[1]="热";
-    this.setState({ totalCity ,keyArr});
+    const keyArr = totalCity.map(v => Object.keys(v)[0]);
+    keyArr[0] = "#";
+    keyArr[1] = "热";
+    this.setState({ totalCity, keyArr });
+
+    // 当数据都渲染完毕了 就取消订阅
+    // console.log(this.Unsubscribe);
+    this.Unsubscribe();
   }
 
   // 左侧 每一行要渲染的 标签
@@ -132,12 +143,22 @@ class index extends Component {
         </div>
         <div className={styles.city_list_content}>
           {item[keyName].map((v, i) =>
-          // 广州 北京  上海 深圳 。。。
-            <div key={i} className={styles.list_item} >{v} </div>
+            // 广州 北京  上海 深圳 。。。
+            <div onClick={this.cityItemClick.bind(this, v)} key={i} className={styles.list_item} >{v} </div>
           )}
         </div>
       </div>
     )
+  }
+  // 城市列表的点击事件
+  cityItemClick = (v) => {
+
+
+    // 1 获取到要跳转的城市了  修订redux中的城市的信息 
+    store.dispatch(citySet(v));
+    // 2 跳转回上一页
+    this.props.history.go(-1);
+
   }
   // 每一大行的高度
   rowHeight = ({ index }) => {
@@ -151,16 +172,16 @@ class index extends Component {
   }
 
   // 每一行被渲染的时候触发
-  rowsRendered=({startIndex})=>{
+  rowsRendered = ({ startIndex }) => {
     // 被渲染的索引
-    if(startIndex===this.state.selectIndex){
+    if (startIndex === this.state.selectIndex) {
       return;
     }
     // 设置 右侧被激活的索引
-    this.setState({ selectIndex:startIndex  });;
+    this.setState({ selectIndex: startIndex });;
   }
   // 右侧字母的 点击事件
-  keyLetterClick=(index)=>{
+  keyLetterClick = (index) => {
     // console.log(index);
     // console.log(this.MainList);
     // 调用 List组件的方法 来控制 List标签的位移  根据被点击的索引
@@ -188,7 +209,7 @@ class index extends Component {
                 onRowsRendered={this.rowsRendered}
                 scrollToAlignment="start" // 对齐方式， 不加的话 点击右侧的字母，左侧 列表 滚动的位置不对
               />
-             
+
             )}
           </AutoSizer>
         </div>
@@ -196,12 +217,12 @@ class index extends Component {
 
         {/* 右侧 字母 开始 */}
         <div className={styles.key_list}>
-          {this.state.keyArr.map((v,i)=>
-          <div onClick={this.keyLetterClick.bind(this,i)}
-           key={v} 
-          //  类名 是 "key_item active" 中间是有空格的，所以 必须要 手动拼接一个 空 字符串
-           className={styles.key_item +" "+  (i===this.state.selectIndex?styles.active:'')  }>{v}</div>
-           )}
+          {this.state.keyArr.map((v, i) =>
+            <div onClick={this.keyLetterClick.bind(this, i)}
+              key={v}
+              //  类名 是 "key_item active" 中间是有空格的，所以 必须要 手动拼接一个 空 字符串
+              className={styles.key_item + " " + (i === this.state.selectIndex ? styles.active : '')}>{v}</div>
+          )}
         </div>
         {/* 右侧 字母 结束 */}
       </div>

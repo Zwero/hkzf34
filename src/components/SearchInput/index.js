@@ -8,6 +8,7 @@ class index extends Component {
   state = {
     cityName: ""
   }
+  Unsubscribe = null;
   constructor() {
     super();
     // 1 获取store中的数据
@@ -18,12 +19,17 @@ class index extends Component {
     }
 
     // 2 订阅 
-    store.subscribe(this.handleStateChange);
+    this.Unsubscribe=store.subscribe(this.handleStateChange);
   }
   handleStateChange = () => {
     this.setState({
       cityName: store.getState().mapReducer.cityName
     })
+  }
+  // 组件将要 卸载的时候 
+  componentWillUnmount() {
+    // 取消订阅 
+    this.Unsubscribe();
   }
   render() {
     return (
